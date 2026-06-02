@@ -5,17 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="943923a5-b6b1-417c-b9ec-6cae3049bf07" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DriveX.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DriveX.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/DTO/LoginRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/DTO/RegisterRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/DTO/loginResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Enums/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Model/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Service/AuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Enums/gender.java" beforeDir="false" afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Enums/Gender.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DriveX/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DriveX/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -48,18 +63,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.DriveXApplication.executor": "Run",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "settings.editor.selected.configurable": "configurable.group.appearance"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.DriveXApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;login__logout&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.postfix.templates&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -76,5 +91,16 @@
       <updated>1779524200278</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Controller/AuthController.java</url>
+          <line>30</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -1,6 +1,6 @@
 package com.example.DriveX.Enums;
 
-public enum gender {
+public enum Gender {
 
     MALE , FEMALE
 }
