@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="943923a5-b6b1-417c-b9ec-6cae3049bf07" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/DTO/LoginRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/DTO/RegisterRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/DTO/loginResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Enums/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Service/AuthService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/config/JWT/JwtUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Enums/gender.java" beforeDir="false" afterPath="$PROJECT_DIR$/DriveX/src/main/java/com/example/DriveX/Enums/Gender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DriveX/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DriveX/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DriveX/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DriveX/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
