@@ -8,14 +8,16 @@ public class loginResponse {
      private String lastName;
      private String email;
      private String profileImage;
+     private String token;
 
-     public loginResponse(Long userId, String firstName, String lastName, String email, String profileImage) {
+     public loginResponse(Long userId, String firstName, String lastName, String email, String profileImage , String token) {
 
          this.userId = userId;
          this.firstName = firstName;
          this.lastName = lastName;
          this.email = email;
          this.profileImage = profileImage;
+         this.token = token;
      }
 
      public Long getUserId() {
@@ -34,6 +36,9 @@ public class loginResponse {
      }
      public String getProfileImage() {
          return profileImage;
+     }
+     public String getToken() {
+         return token;
      }
 
 }

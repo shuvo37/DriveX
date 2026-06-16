@@ -1,14 +1,19 @@
 package com.example.DriveX.Service;
 
+import com.example.DriveX.DTO.CompleteProfileRequest;
 import com.example.DriveX.DTO.LoginRequest;
 import com.example.DriveX.DTO.RegisterRequest;
 import com.example.DriveX.DTO.loginResponse;
+import com.example.DriveX.Enums.Role;
 import com.example.DriveX.Model.User;
 import com.example.DriveX.Repository.UserRepository;
+import com.example.DriveX.config.JWT.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
@@ -17,6 +22,12 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public User register(RegisterRequest  registerRequest)
     {
@@ -85,7 +96,7 @@ public class AuthService {
 
                   registerRequest.getEmail(),
 
-                  registerRequest.getPassword(),
+                  passwordEncoder.encode(registerRequest.getPassword()),
 
                   registerRequest.getPhoneNumber() ,
 
@@ -93,7 +104,7 @@ public class AuthService {
 
                   registerRequest.getProfileImage() ,
 
-                  registerRequest.getCreatedAt() ,
+                  LocalDateTime.now() ,
 
                   registerRequest.getCountry() ,
 
@@ -101,9 +112,11 @@ public class AuthService {
 
                   registerRequest.getGender() ,
 
-                  registerRequest.getRole()
+                   Role.USER
 
           );
+
+          user.setProfileComplete(true);
 
           return  userRepository.save(user);
 
@@ -113,35 +126,67 @@ public class AuthService {
     public loginResponse login(LoginRequest loginRequest)
     {
 
-        Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
+        System.out.println("Login attempt: " + loginRequest.getEmail());
 
-        if(user.isEmpty())
+        User user = userRepository.findByEmail(loginRequest.getEmail()).
+                orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+        System.out.println("User found: " + user.getEmail());
+        System.out.println("Stored password: " + user.getPassword());
+
+
+        if(!passwordEncoder.matches(loginRequest.getPassword(),user.getPassword()))
         {
-            throw new RuntimeException("User not found");
+
+            throw new RuntimeException("Invalid email or password");
 
         }
 
-       User user1 = user.get();
+        System.out.println("Password matched");
 
-       String password = loginRequest.getPassword();
+        System.out.println("Generating token...");
+        String token = jwtUtil.generateToken(user.getEmail());
+        System.out.println("Token generated: " + token);
 
-       if(!password.equals(user1.getPassword()))
-       {
-           throw new RuntimeException("Invalid password");
-       }
 
        return new loginResponse(
 
-               user1.getUserId(),
-               user1.getFirstName() ,
-               user1.getLastName() ,
-               user1.getEmail(),
-               user1.getProfileImage()
+               user.getUserId(),
+               user.getFirstName() ,
+               user.getLastName() ,
+               user.getEmail(),
+               user.getProfileImage()  ,
+               token
 
        );
 
+    }
 
 
+    public loginResponse completeProfile(CompleteProfileRequest request, String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setDateOfBirth(request.getDateOfBirth());
+        user.setCountry(request.getCountry());
+        user.setCity(request.getCity());
+        user.setGender(request.getGender());
+        user.setProfileComplete(true);
+
+        userRepository.save(user);
+
+        String token = jwtUtil.generateToken(email);
+
+        return new loginResponse(
+                user.getUserId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getProfileImage(),
+                token
+        );
     }
 
 

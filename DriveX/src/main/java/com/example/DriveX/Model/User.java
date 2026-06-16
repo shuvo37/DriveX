@@ -33,10 +33,10 @@ public class User {
    @Column(nullable = false)
    private String password;
 
-   @Column(name = "phone_number", nullable = false)
+   @Column(name = "phone_number")
    private String phoneNumber;
 
-   @Column(name = "date_of_birth", nullable = false)
+   @Column(name = "date_of_birth")
    private LocalDate dateOfBirth;
 
    @Column(name = "profile_image")
@@ -45,19 +45,22 @@ public class User {
    @Column(name = "created_at", updatable = false)
    private LocalDateTime createdAt;
 
-   @Column(nullable = false)
+   @Column
    private String country;
 
-   @Column(nullable = false)
+   @Column
    private String city;
 
    @Enumerated(EnumType.STRING)
-   @Column(name = "gender", nullable = false)
+   @Column(name = "gender")
    private Gender gender;
 
    @Enumerated(EnumType.STRING)
-   @Column(name = "role", nullable = false)
+   @Column(name = "role")
    private Role role;
+
+   @Column(name = "is_profile_complete" , nullable = false)
+   private boolean isProfileComplete;
 
    public User() {}
 
@@ -95,6 +98,7 @@ public class User {
    public String getCity() { return city; }
    public Gender getGender() { return gender; }
    public Role getRole() { return role; }
+   public boolean isProfileComplete() { return isProfileComplete; }
 
    // Setters
    public void setUserId(Long userId) { this.userId = userId; }
@@ -110,4 +114,5 @@ public class User {
    public void setCity(String city) { this.city = city; }
    public void setGender(Gender gender) { this.gender = gender; }
    public void setRole(Role role) { this.role = role; }
+   public void setProfileComplete(boolean profileComplete) { isProfileComplete = profileComplete; }
 }

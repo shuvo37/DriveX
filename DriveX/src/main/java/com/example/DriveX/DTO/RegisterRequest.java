@@ -3,25 +3,52 @@ package com.example.DriveX.DTO;
 import com.example.DriveX.Enums.Gender;
 import com.example.DriveX.Enums.Role;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class RegisterRequest {
 
+    @NotBlank(message = "First name is required")
     private String firstName;
+
+    @NotBlank(message = "Last name is required")
     private String lastName;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
+
+    @NotBlank(message = "Confirm password is required")
     private String confirmPassword;
+
+    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid phone number")
     private String phoneNumber;
+
+    @NotNull(message = "Date of birth is required")
+    @Past(message = "Date of birth must be in the past")
     private LocalDate dateOfBirth;
+
     private String profileImage;
-    private LocalDateTime createdAt;
+
+
+    @NotBlank(message = "Country is required")
     private String country;
+
+    @NotBlank(message = "City is required")
     private String city;
+
+    @NotNull(message = "Gender is required")
     private Gender gender;
-    private Role role;
+
+
+
 
 
     public String getFirstName() {
@@ -88,11 +115,8 @@ public class RegisterRequest {
     public String getProfileImage() {
         return profileImage;
     }
+
     public void setProfileImage(String profileImage) {this.profileImage = profileImage;}
-
-    public LocalDateTime getCreatedAt() {return createdAt;}
-
-    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
 
 
     public String getCountry() {
@@ -109,7 +133,4 @@ public class RegisterRequest {
 
     public Gender getGender() {return gender;}
     public void setGender(Gender gender) {this.gender = gender;}
-    public Role getRole() {return role;}
-    public void setRole(Role role) {this.role = role;}
-
 }

@@ -1,18 +1,19 @@
 package com.example.DriveX.Controller;
 
+import com.example.DriveX.DTO.CompleteProfileRequest;
 import com.example.DriveX.DTO.LoginRequest;
 import com.example.DriveX.DTO.RegisterRequest;
 import com.example.DriveX.DTO.loginResponse;
 import com.example.DriveX.Model.User;
 import com.example.DriveX.Repository.UserRepository;
 import com.example.DriveX.Service.AuthService;
+import com.example.DriveX.config.JWT.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -28,8 +29,11 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("register")
-    public ResponseEntity<?>register(@RequestBody RegisterRequest request)
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @PostMapping("/register")
+    public ResponseEntity<?>register( @Valid @RequestBody RegisterRequest request)
     {
 
           try{
@@ -63,9 +67,9 @@ public class AuthController {
     }
 
 
-
+   // @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request)
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request)
     {
 
           try{
@@ -85,6 +89,20 @@ public class AuthController {
 
 
 
+    }
+
+    @PostMapping("/complete-profile")
+    public ResponseEntity<?> completeProfile(@Valid @RequestBody CompleteProfileRequest request,
+                                             @RequestHeader("Authorization") String authHeader) {
+        try {
+            String token = authHeader.substring(7);
+
+            String email = jwtUtil.extractEmail(token);
+            loginResponse response = authService.completeProfile(request, email);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
 
