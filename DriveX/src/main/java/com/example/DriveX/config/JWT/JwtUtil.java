@@ -3,6 +3,7 @@ package com.example.DriveX.config.JWT;
 import java.security.Key;
 import java.util.Date;
 
+import com.example.DriveX.Enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,14 +29,15 @@ public class JwtUtil {
   }
 
 
-  public String generateToken(String email)
+  public String generateToken(String email , Role role)
   {
 
       return Jwts.builder()
               .setSubject(email)
+              .claim("role", role)
               .setIssuedAt(new Date())
               .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-              .signWith(getSigningKey() , SignatureAlgorithm.HS256)
+              .signWith(getSigningKey(), SignatureAlgorithm.HS256)
               .compact();
 
 

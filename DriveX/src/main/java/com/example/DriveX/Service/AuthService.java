@@ -81,13 +81,6 @@ public class AuthService {
         }
 
 
-          if(registerRequest.getCountry() == null)
-          {
-
-              throw new RuntimeException("ciuntry name should not be empty");
-
-          }
-
           User user = new User(
 
                   registerRequest.getFirstName() ,
@@ -106,11 +99,7 @@ public class AuthService {
 
                   LocalDateTime.now() ,
 
-                  registerRequest.getCountry() ,
-
                   registerRequest.getCity() ,
-
-                  registerRequest.getGender() ,
 
                    Role.USER
 
@@ -126,13 +115,13 @@ public class AuthService {
     public loginResponse login(LoginRequest loginRequest)
     {
 
-        System.out.println("Login attempt: " + loginRequest.getEmail());
+     //  System.out.println("Login attempt: " + loginRequest.getEmail());
 
         User user = userRepository.findByEmail(loginRequest.getEmail()).
                 orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
-        System.out.println("User found: " + user.getEmail());
-        System.out.println("Stored password: " + user.getPassword());
+        //System.out.println("User found: " + user.getEmail());
+        //System.out.println("Stored password: " + user.getPassword());
 
 
         if(!passwordEncoder.matches(loginRequest.getPassword(),user.getPassword()))
@@ -142,11 +131,12 @@ public class AuthService {
 
         }
 
-        System.out.println("Password matched");
+       /// System.out.println("Password matched");
+       // System.out.println("Generating token...");
 
-        System.out.println("Generating token...");
-        String token = jwtUtil.generateToken(user.getEmail());
-        System.out.println("Token generated: " + token);
+        String token = jwtUtil.generateToken(user.getEmail() , user.getRole());
+
+       /// System.out.println("Token generated: " + token);
 
 
        return new loginResponse(
@@ -169,15 +159,12 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setDateOfBirth(request.getDateOfBirth());
-        user.setCountry(request.getCountry());
         user.setCity(request.getCity());
-        user.setGender(request.getGender());
         user.setProfileComplete(true);
 
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(email);
+        String token = jwtUtil.generateToken(user.getEmail() , user.getRole());
 
         return new loginResponse(
                 user.getUserId(),

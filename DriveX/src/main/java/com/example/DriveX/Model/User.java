@@ -45,15 +45,8 @@ public class User {
    @Column(name = "created_at", updatable = false)
    private LocalDateTime createdAt;
 
-   @Column
-   private String country;
-
-   @Column
+   @Column(name = "city" , nullable = true)
    private String city;
-
-   @Enumerated(EnumType.STRING)
-   @Column(name = "gender")
-   private Gender gender;
 
    @Enumerated(EnumType.STRING)
    @Column(name = "role")
@@ -65,8 +58,8 @@ public class User {
    public User() {}
 
    public User(String firstName , String lastName , String email , String password ,
-               String phoneNumber , LocalDate dateOfBirth , String profileImage , LocalDateTime createdAt ,
-               String country , String city , Gender gender , Role role)
+               String phoneNumber , LocalDate dateOfBirth , String profileImage ,
+               LocalDateTime createdAt , String city, Role role)
    {
 
           this.firstName = firstName;
@@ -77,9 +70,7 @@ public class User {
           this.dateOfBirth = dateOfBirth;
           this.profileImage = profileImage;
           this.createdAt = createdAt;
-          this.country = country;
           this.city = city;
-          this.gender = gender;
           this.role = role;
 
    }
@@ -94,9 +85,7 @@ public class User {
    public LocalDate getDateOfBirth() { return dateOfBirth; }
    public String getProfileImage() { return profileImage; }
    public LocalDateTime getCreatedAt() { return createdAt; }
-   public String getCountry() { return country; }
    public String getCity() { return city; }
-   public Gender getGender() { return gender; }
    public Role getRole() { return role; }
    public boolean isProfileComplete() { return isProfileComplete; }
 
@@ -110,9 +99,7 @@ public class User {
    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-   public void setCountry(String country) { this.country = country; }
    public void setCity(String city) { this.city = city; }
-   public void setGender(Gender gender) { this.gender = gender; }
    public void setRole(Role role) { this.role = role; }
    public void setProfileComplete(boolean profileComplete) { isProfileComplete = profileComplete; }
 }

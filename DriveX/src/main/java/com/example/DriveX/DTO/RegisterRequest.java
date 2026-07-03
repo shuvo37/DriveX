@@ -21,7 +21,7 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters")
+    @Size(min = 3, message = "Password must be at least 8 characters")
     private String password;
 
     @NotBlank(message = "Confirm password is required")
@@ -37,15 +37,9 @@ public class RegisterRequest {
 
     private String profileImage;
 
-
-    @NotBlank(message = "Country is required")
-    private String country;
-
     @NotBlank(message = "City is required")
     private String city;
 
-    @NotNull(message = "Gender is required")
-    private Gender gender;
 
 
 
@@ -119,18 +113,7 @@ public class RegisterRequest {
     public void setProfileImage(String profileImage) {this.profileImage = profileImage;}
 
 
-    public String getCountry() {
-        return country;
-
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getCity() {return  city;}
     public void setCity(String city) {this.city = city;}
 
-    public Gender getGender() {return gender;}
-    public void setGender(Gender gender) {this.gender = gender;}
 }

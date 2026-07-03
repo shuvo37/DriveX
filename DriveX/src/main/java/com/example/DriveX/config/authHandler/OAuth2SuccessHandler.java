@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
-public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
+public class OAuth2SuccessHandler  implements AuthenticationSuccessHandler {
 
     @Autowired
     private UserRepository userRepository;
@@ -59,14 +59,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             userRepository.save(user);
         }
 
-        String token = jwtUtil.generateToken(email);
+        String token = jwtUtil.generateToken(user.getEmail() , user.getRole());
 
         if (!user.isProfileComplete()) {
             // Redirect to complete profile page with token
-            response.sendRedirect("http://localhost:3000/complete-profile?token=" + token);
+            response.sendRedirect("http://localhost:5173/complete-profile?token=" + token);
         } else {
             // Fully logged in
-            response.sendRedirect("http://localhost:3000/oauth2/callback?token=" + token);
+            response.sendRedirect("http://localhost:5173/oauth2/callback?token=" + token);
         }
     }
 }

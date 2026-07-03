@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 
 public class AuthController {
 
@@ -72,9 +72,12 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request)
     {
 
+
           try{
 
               loginResponse user = authService.login(request);
+
+              System.out.println("hiiihihihihihiih");
 
               return ResponseEntity.ok(user);
 
