@@ -1,17 +1,16 @@
 package com.example.DriveX.Service;
 
-import com.example.DriveX.DTO.CompleteProfileRequest;
-import com.example.DriveX.DTO.LoginRequest;
-import com.example.DriveX.DTO.RegisterRequest;
-import com.example.DriveX.DTO.loginResponse;
+import com.example.DriveX.DTO.*;
 import com.example.DriveX.Enums.Role;
+import com.example.DriveX.Model.ConformationCode;
 import com.example.DriveX.Model.User;
+import com.example.DriveX.Repository.ConformationCodeRepository;
 import com.example.DriveX.Repository.UserRepository;
 import com.example.DriveX.config.JWT.JwtUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -29,17 +28,44 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private ConformationService conformationService;
+
+    @Autowired
+    private ConformationCodeRepository conformationCodeRepository;
+
+    @Transactional
     public User register(RegisterRequest  registerRequest)
     {
 
-          if(registerRequest.getEmail() == null ||userRepository.existsByEmail(registerRequest.getEmail()))
-          {
+        System.out.println("here registering");
 
-               throw new RuntimeException("Email already exist");
+        Optional<User>  user = userRepository.findByEmail(registerRequest.getEmail());
 
-          }
 
-          if(registerRequest.getDateOfBirth() == null || registerRequest.getDateOfBirth().isAfter(LocalDate.now()))
+        if(user.isPresent())
+        {
+
+             User user1 = user.get();
+
+             String password = user1.getPassword();
+
+            if (password == null || password.isEmpty()) {
+                userRepository.deleteByEmail(user1.getEmail());
+                System.out.println("deleted stale row with no password");
+            }
+            else {
+                throw new RuntimeException("Email already exist");
+            }
+
+        }
+
+
+
+          if(registerRequest.getDateOfBirth().isAfter(LocalDate.now()))
           {
 
               throw new RuntimeException("Invalide Year");
@@ -81,7 +107,7 @@ public class AuthService {
         }
 
 
-          User user = new User(
+          User newUser = new User(
 
                   registerRequest.getFirstName() ,
 
@@ -99,17 +125,16 @@ public class AuthService {
 
                   LocalDateTime.now() ,
 
-                  registerRequest.getCity() ,
-
                    Role.USER
 
           );
 
-          user.setProfileComplete(true);
+        newUser.setProfileComplete(true);
 
-          return  userRepository.save(user);
+          return  userRepository.save(newUser);
 
     }
+
 
 
     public loginResponse login(LoginRequest loginRequest)
@@ -134,7 +159,7 @@ public class AuthService {
        /// System.out.println("Password matched");
        // System.out.println("Generating token...");
 
-        String token = jwtUtil.generateToken(user.getEmail() , user.getRole());
+        String token = jwtUtil.generateToken(user.getEmail() ,user.getUserId(),  user.getRole());
 
        /// System.out.println("Token generated: " + token);
 
@@ -145,11 +170,77 @@ public class AuthService {
                user.getFirstName() ,
                user.getLastName() ,
                user.getEmail(),
-               user.getProfileImage()  ,
+               user.getProfileImage(),
+               user.getRole().toString(),
                token
 
        );
 
+    }
+
+
+
+
+
+
+
+
+    public User getUserByEmail(String email)
+    {
+
+          User user =  userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("user not found in getUserByEmail"));
+
+          return user;
+
+    }
+
+    public User UploadImage(String imgUrl , String email)
+    {
+
+        User user =  userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("user not found in uploadimage"));
+        user.setProfileImage(imgUrl);
+        userRepository.save(user);
+        return user;
+
+    }
+
+
+    @Transactional
+    public User ForgetPasswordReset(String email, String code, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("user not found"));
+
+         ConformationCode conformationCode = conformationCodeRepository
+                 .findFirstByEmailAndIsUsedOrderByCreatedAtDesc(email , true)
+                 .orElseThrow(() -> new RuntimeException("conformationCode not found"));
+
+         if(!code.equals(conformationCode.getCode()))
+         {
+             throw new RuntimeException("code mismatch in reset");
+
+         }
+
+        if (newPassword.length() < 8) {
+            throw new RuntimeException("Password too short");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return user;
+    }
+
+
+
+
+    public User RoleUpdate(String email , String role)
+    {
+           User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("user not found in roleupdate"));
+
+        user.setRole(Role.valueOf(role));
+
+        userRepository.save(user);
+
+        return user;
     }
 
 
@@ -159,12 +250,11 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setCity(request.getCity());
         user.setProfileComplete(true);
 
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getEmail() , user.getRole());
+        String token = jwtUtil.generateToken(user.getEmail() ,user.getUserId() ,  user.getRole());
 
         return new loginResponse(
                 user.getUserId(),
@@ -172,6 +262,7 @@ public class AuthService {
                 user.getLastName(),
                 user.getEmail(),
                 user.getProfileImage(),
+                user.getRole().toString(),
                 token
         );
     }

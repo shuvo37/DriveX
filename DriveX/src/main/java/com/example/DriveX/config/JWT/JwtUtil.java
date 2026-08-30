@@ -29,11 +29,12 @@ public class JwtUtil {
   }
 
 
-  public String generateToken(String email , Role role)
+  public String generateToken(String email ,Long userId ,  Role role)
   {
 
       return Jwts.builder()
               .setSubject(email)
+              .claim("userId" , userId)
               .claim("role", role)
               .setIssuedAt(new Date())
               .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
@@ -49,6 +50,10 @@ public class JwtUtil {
        return ParseClaims(token).getSubject();
 
   }
+
+    public Long extractId(String token) {
+        return ParseClaims(token).get("id", Long.class);
+    }
 
 
   public boolean isTokenValid(String token)

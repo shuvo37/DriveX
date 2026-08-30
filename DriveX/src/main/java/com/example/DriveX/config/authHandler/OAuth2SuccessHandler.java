@@ -1,6 +1,4 @@
 package com.example.DriveX.config.authHandler;
-
-
 import com.example.DriveX.Enums.Gender;
 import com.example.DriveX.Enums.Role;
 import com.example.DriveX.Model.User;
@@ -59,11 +57,12 @@ public class OAuth2SuccessHandler  implements AuthenticationSuccessHandler {
             userRepository.save(user);
         }
 
-        String token = jwtUtil.generateToken(user.getEmail() , user.getRole());
+        String token = jwtUtil.generateToken(user.getEmail() ,user.getUserId(), user.getRole());
 
         if (!user.isProfileComplete()) {
             // Redirect to complete profile page with token
             response.sendRedirect("http://localhost:5173/complete-profile?token=" + token);
+
         } else {
             // Fully logged in
             response.sendRedirect("http://localhost:5173/oauth2/callback?token=" + token);

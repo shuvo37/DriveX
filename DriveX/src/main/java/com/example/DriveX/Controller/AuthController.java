@@ -1,12 +1,12 @@
 package com.example.DriveX.Controller;
 
-import com.example.DriveX.DTO.CompleteProfileRequest;
-import com.example.DriveX.DTO.LoginRequest;
-import com.example.DriveX.DTO.RegisterRequest;
-import com.example.DriveX.DTO.loginResponse;
+import com.example.DriveX.DTO.*;
+import com.example.DriveX.Enums.Role;
+import com.example.DriveX.Model.ConformationCode;
 import com.example.DriveX.Model.User;
 import com.example.DriveX.Repository.UserRepository;
 import com.example.DriveX.Service.AuthService;
+import com.example.DriveX.Service.ConformationService;
 import com.example.DriveX.config.JWT.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ import java.util.Map;
 
 public class AuthController {
 
-
     @Autowired
     private UserRepository userRepository;
 
@@ -32,13 +31,18 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private ConformationService conformationService;
+
     @PostMapping("/register")
     public ResponseEntity<?>register( @Valid @RequestBody RegisterRequest request)
     {
 
-          try{
+              System.out.println("sending "+ request);
 
               User saved = authService.register(request);
+
+
 
               return ResponseEntity
                       .status(HttpStatus.CREATED)
@@ -49,63 +53,98 @@ public class AuthController {
 
                       ));
 
-          } catch(RuntimeException e)
-          {
+    }
 
-               return ResponseEntity
-                       .status(HttpStatus.BAD_REQUEST)
-                       .body(Map.of(
+    @PatchMapping("/role-update")
+    public ResponseEntity<?> updateRole(@RequestParam String email, @RequestParam String role)
+    {
+          User user = authService.RoleUpdate(email ,role);
 
-                         "message" , e.getMessage()
-                       ));
-
-
-          }
-
-
-
+          return ResponseEntity.ok(user);
     }
 
 
-   // @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request)
     {
 
-
-          try{
-
               loginResponse user = authService.login(request);
 
-              System.out.println("hiiihihihihihiih");
-
               return ResponseEntity.ok(user);
+    }
 
-          }catch(RuntimeException e)
-          {
+    @GetMapping("/get-user-by-email")
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email)
+    {
 
-               return ResponseEntity
-                       .status(HttpStatus.UNAUTHORIZED)
-                       .body(Map.of("error" , e.getMessage()));
+        User user = authService.getUserByEmail(email);
 
-          }
-
-
+        return ResponseEntity.ok(user);
 
     }
+
+    @PostMapping("/forgot-password/check-email")
+    public ResponseEntity<ForgetPasswordResponse> forgetPasswordCheckEmail(@RequestBody Map<String, String> request)
+    {
+        String email = request.get("email");
+
+        ForgetPasswordResponse conformationCode = conformationService.forgotPassword(email);
+
+
+         return ResponseEntity.ok(conformationCode);
+
+    }
+
+    @PostMapping("/forgot-password/verify-code")
+    public ResponseEntity<?> forgetPasswordVerifyCode(@RequestBody Map<String, String> request)
+    {
+        String email = request.get("email");
+        String code = request.get("code");
+
+        boolean ok = conformationService.ForgetPasswordVerifyCode(email , code);
+
+
+
+        return ResponseEntity.ok(ok);
+
+    }
+
+    @PostMapping("/forgot-password/resend-code")
+    public ResponseEntity<?> forgetPasswordResendCode(@RequestBody Map<String, String> request)
+    {
+         String email = request.get("email");
+
+         ResendCodeResponse resendCodeResponse  = conformationService.ForgetPasswordResendCode(email);
+
+        return ResponseEntity.ok(resendCodeResponse);
+
+    }
+
+    @PostMapping("/forgot-password/reset")
+    public ResponseEntity<?> forgetPasswordReset(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String code = request.get("code");
+        String newPassword = request.get("newPassword");
+
+         System.out.println("sending "+ email + " "+ code + " "+ newPassword);
+
+        User user = authService.ForgetPasswordReset(email, code, newPassword);
+
+        return ResponseEntity.ok(true);
+    }
+
+
+
 
     @PostMapping("/complete-profile")
     public ResponseEntity<?> completeProfile(@Valid @RequestBody CompleteProfileRequest request,
                                              @RequestHeader("Authorization") String authHeader) {
-        try {
             String token = authHeader.substring(7);
 
             String email = jwtUtil.extractEmail(token);
             loginResponse response = authService.completeProfile(request, email);
             return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-        }
+
     }
 
 

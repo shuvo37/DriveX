@@ -40,8 +40,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173",
+                "http://localhost:5174",
+                "http://localhost:5175" , "http://localhost:5176" ,
+                "http://localhost:5180"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
@@ -52,13 +55,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // ← add this
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))  // ← add this
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/complete-profile").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/login","/api/auth/**",
+                                "/api/auth/complete-profile" , "/api/images/**"
+                          ,"/api/company","/api/company/**" , "/api/car" ,"/api/car/**" , "/api/payment" ,
+                                "/api/booking" ,"/api/booking/**" , "/api/car/get-all-rented-cars" ,
+                                "/api/booking/get-booking-of-car" , "/api/submission/**"
+                            ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
