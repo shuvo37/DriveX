@@ -2,10 +2,13 @@ package com.example.DriveX.Model;
 
 import com.example.DriveX.Enums.Gender;
 import com.example.DriveX.Enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
@@ -45,12 +48,13 @@ public class User {
    @Column(name = "created_at", updatable = false)
    private LocalDateTime createdAt;
 
-   @Column(name = "city" , nullable = true)
-   private String city;
-
    @Enumerated(EnumType.STRING)
    @Column(name = "role")
    private Role role;
+
+   @JsonIgnore
+   @OneToMany(mappedBy = "user")
+   private List<Bookings> bookings = new ArrayList<>();
 
    @Column(name = "is_profile_complete" , nullable = false)
    private boolean isProfileComplete;
@@ -59,7 +63,7 @@ public class User {
 
    public User(String firstName , String lastName , String email , String password ,
                String phoneNumber , LocalDate dateOfBirth , String profileImage ,
-               LocalDateTime createdAt , String city, Role role)
+               LocalDateTime createdAt ,  Role role)
    {
 
           this.firstName = firstName;
@@ -70,7 +74,6 @@ public class User {
           this.dateOfBirth = dateOfBirth;
           this.profileImage = profileImage;
           this.createdAt = createdAt;
-          this.city = city;
           this.role = role;
 
    }
@@ -79,18 +82,19 @@ public class User {
    public Long getUserId() { return userId; }
    public String getFirstName() { return firstName; }
    public String getLastName() { return lastName; }
+   public String getFullName() { return firstName + " " + lastName; }
    public String getEmail() { return email; }
    public String getPassword() { return password; }
    public String getPhoneNumber() { return phoneNumber; }
    public LocalDate getDateOfBirth() { return dateOfBirth; }
    public String getProfileImage() { return profileImage; }
    public LocalDateTime getCreatedAt() { return createdAt; }
-   public String getCity() { return city; }
    public Role getRole() { return role; }
+   public List<Bookings> getBookings (){return  bookings;}
    public boolean isProfileComplete() { return isProfileComplete; }
 
+
    // Setters
-   public void setUserId(Long userId) { this.userId = userId; }
    public void setFirstName(String firstName) { this.firstName = firstName; }
    public void setLastName(String lastName) { this.lastName = lastName; }
    public void setEmail(String email) { this.email = email; }
@@ -99,7 +103,8 @@ public class User {
    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-   public void setCity(String city) { this.city = city; }
    public void setRole(Role role) { this.role = role; }
+   public void setBookings(List<Bookings> bookings) { this.bookings = bookings; }
    public void setProfileComplete(boolean profileComplete) { isProfileComplete = profileComplete; }
 }
+

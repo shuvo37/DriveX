@@ -20,13 +20,6 @@ public class RegisterRequest {
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 3, message = "Password must be at least 8 characters")
-    private String password;
-
-    @NotBlank(message = "Confirm password is required")
-    private String confirmPassword;
-
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid phone number")
     private String phoneNumber;
@@ -35,10 +28,16 @@ public class RegisterRequest {
     @Past(message = "Date of birth must be in the past")
     private LocalDate dateOfBirth;
 
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 3, message = "Password must be at least 8 characters")
+    private String password;
+
+    @NotBlank(message = "Confirm password is required")
+    private String confirmPassword;
+
     private String profileImage;
 
-    @NotBlank(message = "City is required")
-    private String city;
 
 
 
@@ -63,7 +62,6 @@ public class RegisterRequest {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
 
     public String getEmail() {
         return email;
@@ -111,9 +109,4 @@ public class RegisterRequest {
     }
 
     public void setProfileImage(String profileImage) {this.profileImage = profileImage;}
-
-
-    public String getCity() {return  city;}
-    public void setCity(String city) {this.city = city;}
-
 }

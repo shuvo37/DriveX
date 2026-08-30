@@ -13,14 +13,7 @@ public class CompleteProfileRequest {
     @Pattern(regexp = "^\\+?[0-9]{10,15}$" , message = "invalide phone number")
     private String phoneNumber;
 
-    @NotBlank(message = "City is required")
-    private String city;
-
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
-
 
 }
